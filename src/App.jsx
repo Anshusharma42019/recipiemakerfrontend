@@ -3,6 +3,7 @@ import Register from './components/Register';
 import Login from './components/Login';
 import Sidebar from './components/Sidebar';
 import Inventory from './components/inventory/Inventory';
+import Recipes from './components/Recipes';
 import ChangePassword from './components/ChangePassword';
 
 const App = () => {
@@ -42,7 +43,7 @@ const App = () => {
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} onLogout={handleLogout} />
       <div style={{ flex: 1, overflow: 'auto' }}>
         {activeTab === 'inventory' && <Inventory />}
-        {activeTab === 'recipes' && <div style={{ padding: '40px' }}><h1>Recipes Coming Soon</h1></div>}
+        {activeTab === 'recipes' && <Recipes />}
         {activeTab === 'settings' && <ChangePassword />}
       </div>
     </div>
