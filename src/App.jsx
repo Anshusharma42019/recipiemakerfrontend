@@ -4,6 +4,7 @@ import Login from './components/Login';
 import Sidebar from './components/Sidebar';
 import Inventory from './components/inventory/Inventory';
 import Recipes from './components/Recipes';
+import RawMaterials from './components/RawMaterials';
 import ChangePassword from './components/ChangePassword';
 
 const App = () => {
@@ -44,6 +45,7 @@ const App = () => {
       <div style={{ flex: 1, overflow: 'auto' }}>
         {activeTab === 'inventory' && <Inventory />}
         {activeTab === 'recipes' && <Recipes />}
+        {activeTab === 'rawmaterials' && <RawMaterials />}
         {activeTab === 'settings' && <ChangePassword />}
       </div>
     </div>

@@ -5,6 +5,7 @@ const Sidebar = ({ activeTab, setActiveTab, onLogout }) => {
   const menuItems = [
     { id: 'recipes', label: 'Recipes', icon: '📖' },
     { id: 'inventory', label: 'Inventory', icon: '📦' },
+    { id: 'rawmaterials', label: 'Raw Materials', icon: '🏭' },
     { id: 'settings', label: 'Settings', icon: '⚙️' }
   ];
 
