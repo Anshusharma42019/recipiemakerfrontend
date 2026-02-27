@@ -1,35 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import Register from './components/Register';
+import Login from './components/Login';
+import Sidebar from './components/Sidebar';
+import Inventory from './components/inventory/Inventory';
+import ChangePassword from './components/ChangePassword';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
+  const [showRegister, setShowRegister] = useState(false);
+  const [activeTab, setActiveTab] = useState('inventory');
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+  };
+
+  if (!isLoggedIn) {
+    return (
+      <div>
+        {showRegister ? (
+          <>
+            <Register onSuccess={() => setIsLoggedIn(true)} />
+            <p style={{ position: 'absolute', bottom: '30px', right: '50%', transform: 'translateX(50%)', color: 'white', zIndex: 10 }}>
+              Already have an account? <button onClick={() => setShowRegister(false)} style={{ background: 'white', border: 'none', color: '#667eea', cursor: 'pointer', padding: '8px 20px', borderRadius: '8px', fontWeight: '600', marginLeft: '10px' }}>Login</button>
+            </p>
+          </>
+        ) : (
+          <>
+            <Login onSuccess={() => setIsLoggedIn(true)} />
+            <p style={{ position: 'absolute', bottom: '30px', right: '50%', transform: 'translateX(50%)', color: 'white', zIndex: 10 }}>
+              Don't have an account? <button onClick={() => setShowRegister(true)} style={{ background: 'white', border: 'none', color: '#667eea', cursor: 'pointer', padding: '8px 20px', borderRadius: '8px', fontWeight: '600', marginLeft: '10px' }}>Register</button>
+            </p>
+          </>
+        )}
+      </div>
+    );
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div style={{ display: 'flex', height: '100vh', background: '#f5f5f5' }}>
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} onLogout={handleLogout} />
+      <div style={{ flex: 1, overflow: 'auto' }}>
+        {activeTab === 'inventory' && <Inventory />}
+        {activeTab === 'recipes' && <div style={{ padding: '40px' }}><h1>Recipes Coming Soon</h1></div>}
+        {activeTab === 'settings' && <ChangePassword />}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    </div>
+  );
+};
 
-export default App
+export default App;
