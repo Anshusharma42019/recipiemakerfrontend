@@ -6,13 +6,23 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 const Recipes = () => {
   const [recipes, setRecipes] = useState([]);
   const [inventory, setInventory] = useState([]);
+  const [rawMaterials, setRawMaterials] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({ title: '', instructions: '', cookTime: '', servings: '', ingredients: [] });
 
   useEffect(() => {
     fetchRecipes();
     fetchInventory();
+    fetchRawMaterials();
   }, []);
+
+  const fetchRawMaterials = async () => {
+    const res = await fetch(`${API_URL}/rawmaterials`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+    });
+    const data = await res.json();
+    setRawMaterials(data);
+  };
 
   const fetchRecipes = async () => {
     const res = await fetch(`${API_URL}/recipes`, {
@@ -146,6 +156,43 @@ const Recipes = () => {
           <h3 style={{ marginTop: 0, color: 'white', display: 'flex', alignItems: 'center', gap: '8px' }}>
             👩‍🍳 Create New Recipe
           </h3>
+          
+          {rawMaterials.length > 0 && (
+            <div style={{ marginBottom: '15px' }}>
+              <label style={{ color: 'white', fontSize: '14px', marginBottom: '8px', display: 'block' }}>Select from Raw Materials:</label>
+              <select
+                onChange={(e) => {
+                  const rm = rawMaterials.find(r => r._id === e.target.value);
+                  if (rm) {
+                    setFormData({ 
+                      ...formData, 
+                      title: rm.recipeName,
+                      ingredients: rm.ingredients.map(ing => ({
+                        inventoryId: ing.inventoryId._id,
+                        quantity: ing.quantity,
+                        unit: ing.inventoryId.unit
+                      }))
+                    });
+                  }
+                }}
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  border: '2px solid #e0e0e0',
+                  borderRadius: '8px',
+                  fontSize: '15px',
+                  outline: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                <option value="">-- Or select a raw material recipe --</option>
+                {rawMaterials.map(rm => (
+                  <option key={rm._id} value={rm._id}>{rm.recipeName}</option>
+                ))}
+              </select>
+            </div>
+          )}
+          
           <input
             type="text"
             placeholder="Recipe Title (e.g., Daal)"
