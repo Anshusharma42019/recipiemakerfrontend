@@ -9,7 +9,18 @@ const Sidebar = ({ activeTab, setActiveTab, onLogout }) => {
   ];
 
   return (
-    <div style={{ width: '250px', background: 'linear-gradient(180deg, #667eea 0%, #764ba2 100%)', height: '100vh', display: 'flex', flexDirection: 'column', boxShadow: '2px 0 10px rgba(0,0,0,0.1)' }}>
+    <div style={{ 
+      width: '250px', 
+      background: 'url(https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&q=80) center/cover',
+      height: '100vh', 
+      display: 'flex', 
+      flexDirection: 'column', 
+      boxShadow: '2px 0 10px rgba(0,0,0,0.1)',
+      backdropFilter: 'blur(10px)',
+      position: 'relative'
+    }}>
+      <div style={{ position: 'absolute', inset: 0, backdropFilter: 'blur(8px)', background: 'rgba(0,0,0,0.3)', zIndex: 0 }} />
+      <div style={{ position: 'relative', zIndex: 1, height: '100%', display: 'flex', flexDirection: 'column' }}>
       <div style={{ padding: '30px 20px', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>
         <h2 style={{ color: 'white', margin: 0, fontSize: '24px', fontWeight: '700' }}>Recipe Maker</h2>
       </div>
@@ -60,6 +71,7 @@ const Sidebar = ({ activeTab, setActiveTab, onLogout }) => {
         >
           Logout
         </motion.button>
+      </div>
       </div>
     </div>
   );

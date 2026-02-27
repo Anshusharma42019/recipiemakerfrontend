@@ -30,7 +30,7 @@ const Register = ({ onSuccess }) => {
         transition={{ duration: 0.8 }}
         style={{ 
           flex: 1, 
-          backgroundImage: 'url(https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1200)',
+          backgroundImage: 'url(https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=1200)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           position: 'relative'

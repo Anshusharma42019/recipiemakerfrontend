@@ -30,7 +30,7 @@ const Login = ({ onSuccess }) => {
         transition={{ duration: 0.8 }}
         style={{ 
           flex: 1, 
-          backgroundImage: 'url(https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200)',
+          backgroundImage: 'url(https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=1200)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           position: 'relative'
