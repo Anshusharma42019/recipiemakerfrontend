@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { MdInventory, MdEdit, MdDelete, MdClose, MdAdd, MdWarning } from 'react-icons/md';
+import { MdInventory, MdEdit, MdDelete, MdClose, MdAdd } from 'react-icons/md';
+import { BiSolidError } from 'react-icons/bi';
 
 const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://localhost:5000/api';
 
@@ -353,7 +354,7 @@ const RawMaterials = () => {
                   borderBottom: idx < item.ingredients.length - 1 ? '1px solid #f0f0f0' : 'none'
                 }}>
                   <span style={{ fontSize: '13px', color: '#2d3436' }}>
-                    {isLowStock(ing) && <MdWarning style={{ color: '#ff6348', verticalAlign: 'middle' }} />}
+                    {isLowStock(ing) && <BiSolidError style={{ color: '#ff6348', verticalAlign: 'middle' }} />}
                     {ing.inventoryId?.name}
                   </span>
                   <span style={{ fontSize: '13px', color: isLowStock(ing) ? '#ff6348' : '#636e72', fontWeight: '600' }}>
