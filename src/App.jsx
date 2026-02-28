@@ -32,14 +32,14 @@ const App = () => {
         {showRegister ? (
           <>
             <Register onSuccess={() => setIsLoggedIn(true)} />
-            <p style={{ position: 'absolute', bottom: '30px', right: '50%', transform: 'translateX(50%)', color: 'white', zIndex: 10 }}>
+            <p style={{ position: 'absolute', bottom: '30px', left: '50%', transform: 'translateX(-50%)', color: 'white', zIndex: 10, textAlign: 'center', whiteSpace: 'nowrap' }}>
               Already have an account? <button onClick={() => setShowRegister(false)} style={{ background: 'white', border: 'none', color: '#667eea', cursor: 'pointer', padding: '8px 20px', borderRadius: '8px', fontWeight: '600', marginLeft: '10px' }}>Login</button>
             </p>
           </>
         ) : (
           <>
             <Login onSuccess={() => setIsLoggedIn(true)} />
-            <p style={{ position: 'absolute', bottom: '30px', right: '50%', transform: 'translateX(50%)', color: 'white', zIndex: 10 }}>
+            <p style={{ position: 'absolute', bottom: '30px', left: '50%', transform: 'translateX(-50%)', color: 'white', zIndex: 10, textAlign: 'center', whiteSpace: 'nowrap' }}>
               Don't have an account? <button onClick={() => setShowRegister(true)} style={{ background: 'white', border: 'none', color: '#667eea', cursor: 'pointer', padding: '8px 20px', borderRadius: '8px', fontWeight: '600', marginLeft: '10px' }}>Register</button>
             </p>
           </>

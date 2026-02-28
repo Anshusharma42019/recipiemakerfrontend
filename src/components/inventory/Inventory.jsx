@@ -278,7 +278,7 @@ const Inventory = () => {
             <div>
               <h3 style={{ margin: '0 0 8px 0', color: '#2d3436', fontSize: window.innerWidth < 768 ? '16px' : '18px', fontWeight: '600' }}>{item.name}</h3>
               <p style={{ margin: '0 0 6px 0', color: '#636e72', fontSize: '13px', fontWeight: '500' }}>
-                {item.quantity} {item.unit} {item.price > 0 && `• $${item.price}`}
+                {item.quantity} {item.unit} {item.price > 0 && `• ₹${item.price}`}
               </p>
               {item.category && <span style={{ fontSize: '12px', color: '#667eea', marginTop: '4px', display: 'inline-block', background: '#f0f0ff', padding: '3px 10px', borderRadius: '12px', fontWeight: '600' }}><MdRestaurantMenu style={{ verticalAlign: 'middle' }} /> {item.category}</span>}
             </div>
