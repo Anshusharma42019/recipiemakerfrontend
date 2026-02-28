@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://localhost:5000/api';
 
 const RawMaterials = () => {
   const [items, setItems] = useState([]);
   const [inventoryItems, setInventoryItems] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  const [formData, setFormData] = useState({ recipeName: '', variation: '', ingredients: [{ inventoryId: '', quantity: '' }] });
   const [formData, setFormData] = useState({ recipeName: '', variation: '', ingredients: [{ inventoryId: '', quantity: '' }] });
 
   useEffect(() => {
@@ -172,34 +171,6 @@ const RawMaterials = () => {
               marginBottom: '20px'
             }}
           />
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '20px' }}>
-            <input
-              type="text"
-              placeholder="Recipe name (e.g., Pizza)"
-              value={formData.recipeName}
-              onChange={(e) => setFormData({ ...formData, recipeName: e.target.value })}
-              style={{
-                padding: '12px',
-                border: '2px solid #e0e0e0',
-                borderRadius: '8px',
-                fontSize: '15px',
-                outline: 'none'
-              }}
-            />
-            <input
-              type="text"
-              placeholder="Variation (e.g., Spicy, Vegan)"
-              value={formData.variation}
-              onChange={(e) => setFormData({ ...formData, variation: e.target.value })}
-              style={{
-                padding: '12px',
-                border: '2px solid #e0e0e0',
-                borderRadius: '8px',
-                fontSize: '15px',
-                outline: 'none'
-              }}
-            />
-          </div>
           
           <h4 style={{ color: '#2d3436', marginBottom: '15px' }}>Ingredients:</h4>
           {formData.ingredients.map((ingredient, index) => (
