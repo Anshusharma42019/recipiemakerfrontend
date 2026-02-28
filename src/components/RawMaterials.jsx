@@ -8,6 +8,7 @@ const RawMaterials = () => {
   const [inventoryItems, setInventoryItems] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({ recipeName: '', variation: '', ingredients: [{ inventoryId: '', quantity: '' }] });
+  const [formData, setFormData] = useState({ recipeName: '', variation: '', ingredients: [{ inventoryId: '', quantity: '' }] });
 
   useEffect(() => {
     fetchItems();
@@ -47,7 +48,7 @@ const RawMaterials = () => {
 
   const addItem = async () => {
     if (formData.recipeName && formData.ingredients.every(ing => ing.inventoryId && ing.quantity)) {
-      await fetch(`${API_URL}/rawmaterials`, {
+      const res = await fetch(`${API_URL}/rawmaterials`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -55,6 +56,14 @@ const RawMaterials = () => {
         },
         body: JSON.stringify(formData)
       });
+      
+      if (!res.ok) {
+        const error = await res.json();
+        alert(error.message || 'Failed to create recipe');
+        return;
+      }
+      
+      setFormData({ recipeName: '', variation: '', ingredients: [{ inventoryId: '', quantity: '' }] });
       setFormData({ recipeName: '', variation: '', ingredients: [{ inventoryId: '', quantity: '' }] });
       setShowForm(false);
       fetchItems();
@@ -112,6 +121,36 @@ const RawMaterials = () => {
           }}
         >
           <h3 style={{ marginTop: 0, color: '#2d3436' }}>🍕 Add New Recipe</h3>
+          <input
+            type="text"
+            placeholder="Recipe name (e.g., Pizza)"
+            value={formData.recipeName}
+            onChange={(e) => setFormData({ ...formData, recipeName: e.target.value })}
+            style={{
+              width: '100%',
+              padding: '12px',
+              border: '2px solid #e0e0e0',
+              borderRadius: '8px',
+              fontSize: '15px',
+              outline: 'none',
+              marginBottom: '10px'
+            }}
+          />
+          <input
+            type="text"
+            placeholder="Variation (optional, e.g., Margherita)"
+            value={formData.variation}
+            onChange={(e) => setFormData({ ...formData, variation: e.target.value })}
+            style={{
+              width: '100%',
+              padding: '12px',
+              border: '2px solid #e0e0e0',
+              borderRadius: '8px',
+              fontSize: '15px',
+              outline: 'none',
+              marginBottom: '20px'
+            }}
+          />
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '20px' }}>
             <input
               type="text"
@@ -259,6 +298,10 @@ const RawMaterials = () => {
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '15px' }}>
+              <div>
+                <h3 style={{ margin: 0, color: '#2d3436', fontSize: '20px' }}>🍕 {item.recipeName}</h3>
+                {item.variation && <p style={{ margin: '4px 0 0 0', color: '#636e72', fontSize: '14px' }}>{item.variation}</p>}
+              </div>
               <div>
                 <h3 style={{ margin: 0, color: '#2d3436', fontSize: '20px' }}>🍕 {item.recipeName}</h3>
                 {item.variation && <span style={{ fontSize: '13px', color: '#a29bfe', fontWeight: '600' }}>✨ {item.variation}</span>}
