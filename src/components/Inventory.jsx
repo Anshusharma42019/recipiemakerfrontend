@@ -33,11 +33,17 @@ const Inventory = () => {
   }, []);
 
   const fetchItems = async () => {
-    const res = await fetch(`${API_URL}/inventory`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-    });
-    const data = await res.json();
-    setItems(data);
+    try {
+      const res = await fetch(`${API_URL}/inventory`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
+      if (!res.ok) throw new Error('Failed to fetch');
+      const data = await res.json();
+      setItems(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error('Error fetching items:', error);
+      setItems([]);
+    }
   };
 
   const addItem = async () => {
@@ -101,7 +107,7 @@ const Inventory = () => {
     return lowThresholds[unit] || 10;
   };
 
-  const lowStockCount = items.filter(isLowStock).length;
+  const lowStockCount = Array.isArray(items) ? items.filter(isLowStock).length : 0;
 
   return (
     <div style={{ padding: '40px' }}>
@@ -283,7 +289,7 @@ const Inventory = () => {
       )}
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
-        {items.map((item) => (
+        {Array.isArray(items) && items.map((item) => (
           <motion.div
             key={item._id}
             initial={{ opacity: 0, scale: 0.9 }}
@@ -347,7 +353,7 @@ const Inventory = () => {
         ))}
       </div>
 
-      {items.length === 0 && !showForm && (
+      {(!Array.isArray(items) || items.length === 0) && !showForm && (
         <div style={{ textAlign: 'center', padding: '60px', color: '#999' }}>
           <p style={{ fontSize: '18px' }}>No items in inventory. Click "Add Item" to get started!</p>
         </div>
