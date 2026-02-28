@@ -7,6 +7,7 @@ const RawMaterials = () => {
   const [items, setItems] = useState([]);
   const [inventoryItems, setInventoryItems] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({ recipeName: '', variation: '', ingredients: [{ inventoryId: '', quantity: '' }] });
   const [formData, setFormData] = useState({ recipeName: '', variation: '', ingredients: [{ inventoryId: '', quantity: '' }] });
 
@@ -48,8 +49,11 @@ const RawMaterials = () => {
 
   const addItem = async () => {
     if (formData.recipeName && formData.ingredients.every(ing => ing.inventoryId && ing.quantity)) {
-      const res = await fetch(`${API_URL}/rawmaterials`, {
-        method: 'POST',
+      const url = editingId ? `${API_URL}/rawmaterials/${editingId}` : `${API_URL}/rawmaterials`;
+      const method = editingId ? 'PUT' : 'POST';
+      
+      const res = await fetch(url, {
+        method,
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -59,12 +63,12 @@ const RawMaterials = () => {
       
       if (!res.ok) {
         const error = await res.json();
-        alert(error.message || 'Failed to create recipe');
+        alert(error.message || 'Failed to save recipe');
         return;
       }
       
       setFormData({ recipeName: '', variation: '', ingredients: [{ inventoryId: '', quantity: '' }] });
-      setFormData({ recipeName: '', variation: '', ingredients: [{ inventoryId: '', quantity: '' }] });
+      setEditingId(null);
       setShowForm(false);
       fetchItems();
     }
@@ -76,6 +80,19 @@ const RawMaterials = () => {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
     });
     fetchItems();
+  };
+
+  const editItem = (item) => {
+    setFormData({
+      recipeName: item.recipeName,
+      variation: item.variation || '',
+      ingredients: item.ingredients.map(ing => ({
+        inventoryId: ing.inventoryId._id,
+        quantity: ing.quantity
+      }))
+    });
+    setEditingId(item._id);
+    setShowForm(true);
   };
 
   const isLowStock = (ingredient) => {
@@ -92,7 +109,11 @@ const RawMaterials = () => {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          onClick={() => setShowForm(!showForm)}
+          onClick={() => {
+            setShowForm(!showForm);
+            setEditingId(null);
+            setFormData({ recipeName: '', variation: '', ingredients: [{ inventoryId: '', quantity: '' }] });
+          }}
           style={{
             padding: '12px 24px',
             background: 'linear-gradient(135deg, #fd79a8 0%, #a29bfe 100%)',
@@ -120,7 +141,7 @@ const RawMaterials = () => {
             marginBottom: '30px'
           }}
         >
-          <h3 style={{ marginTop: 0, color: '#2d3436' }}>🍕 Add New Recipe</h3>
+          <h3 style={{ marginTop: 0, color: '#2d3436' }}>{editingId ? '✏️ Edit Recipe' : '🍕 Add New Recipe'}</h3>
           <input
             type="text"
             placeholder="Recipe name (e.g., Pizza)"
@@ -262,10 +283,14 @@ const RawMaterials = () => {
                 fontWeight: '600'
               }}
             >
-              Save Recipe
+              {editingId ? 'Update Recipe' : 'Save Recipe'}
             </button>
             <button
-              onClick={() => setShowForm(false)}
+              onClick={() => {
+                setShowForm(false);
+                setEditingId(null);
+                setFormData({ recipeName: '', variation: '', ingredients: [{ inventoryId: '', quantity: '' }] });
+              }}
               style={{
                 padding: '10px 20px',
                 background: '#e0e0e0',
@@ -302,25 +327,38 @@ const RawMaterials = () => {
                 <h3 style={{ margin: 0, color: '#2d3436', fontSize: '20px' }}>🍕 {item.recipeName}</h3>
                 {item.variation && <p style={{ margin: '4px 0 0 0', color: '#636e72', fontSize: '14px' }}>{item.variation}</p>}
               </div>
-              <div>
-                <h3 style={{ margin: 0, color: '#2d3436', fontSize: '20px' }}>🍕 {item.recipeName}</h3>
-                {item.variation && <span style={{ fontSize: '13px', color: '#a29bfe', fontWeight: '600' }}>✨ {item.variation}</span>}
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button
+                  onClick={() => editItem(item)}
+                  style={{
+                    background: '#74b9ff',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '6px 12px',
+                    cursor: 'pointer',
+                    fontWeight: '600',
+                    fontSize: '12px'
+                  }}
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => deleteItem(item._id)}
+                  style={{
+                    background: '#ff6348',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '6px 12px',
+                    cursor: 'pointer',
+                    fontWeight: '600',
+                    fontSize: '12px'
+                  }}
+                >
+                  Delete
+                </button>
               </div>
-              <button
-                onClick={() => deleteItem(item._id)}
-                style={{
-                  background: '#ff6348',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '8px',
-                  padding: '6px 12px',
-                  cursor: 'pointer',
-                  fontWeight: '600',
-                  fontSize: '12px'
-                }}
-              >
-                Delete
-              </button>
             </div>
             
             <div style={{ borderTop: '1px solid #e0e0e0', paddingTop: '10px' }}>
