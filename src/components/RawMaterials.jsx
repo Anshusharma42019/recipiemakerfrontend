@@ -8,6 +8,7 @@ const RawMaterials = () => {
   const [inventoryItems, setInventoryItems] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({ recipeName: '', variation: '', ingredients: [{ inventoryId: '', quantity: '' }] });
+  const [formData, setFormData] = useState({ recipeName: '', variation: '', ingredients: [{ inventoryId: '', quantity: '' }] });
 
   useEffect(() => {
     fetchItems();
@@ -62,6 +63,7 @@ const RawMaterials = () => {
         return;
       }
       
+      setFormData({ recipeName: '', variation: '', ingredients: [{ inventoryId: '', quantity: '' }] });
       setFormData({ recipeName: '', variation: '', ingredients: [{ inventoryId: '', quantity: '' }] });
       setShowForm(false);
       fetchItems();
@@ -149,6 +151,34 @@ const RawMaterials = () => {
               marginBottom: '20px'
             }}
           />
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '20px' }}>
+            <input
+              type="text"
+              placeholder="Recipe name (e.g., Pizza)"
+              value={formData.recipeName}
+              onChange={(e) => setFormData({ ...formData, recipeName: e.target.value })}
+              style={{
+                padding: '12px',
+                border: '2px solid #e0e0e0',
+                borderRadius: '8px',
+                fontSize: '15px',
+                outline: 'none'
+              }}
+            />
+            <input
+              type="text"
+              placeholder="Variation (e.g., Spicy, Vegan)"
+              value={formData.variation}
+              onChange={(e) => setFormData({ ...formData, variation: e.target.value })}
+              style={{
+                padding: '12px',
+                border: '2px solid #e0e0e0',
+                borderRadius: '8px',
+                fontSize: '15px',
+                outline: 'none'
+              }}
+            />
+          </div>
           
           <h4 style={{ color: '#2d3436', marginBottom: '15px' }}>Ingredients:</h4>
           {formData.ingredients.map((ingredient, index) => (
@@ -271,6 +301,10 @@ const RawMaterials = () => {
               <div>
                 <h3 style={{ margin: 0, color: '#2d3436', fontSize: '20px' }}>🍕 {item.recipeName}</h3>
                 {item.variation && <p style={{ margin: '4px 0 0 0', color: '#636e72', fontSize: '14px' }}>{item.variation}</p>}
+              </div>
+              <div>
+                <h3 style={{ margin: 0, color: '#2d3436', fontSize: '20px' }}>🍕 {item.recipeName}</h3>
+                {item.variation && <span style={{ fontSize: '13px', color: '#a29bfe', fontWeight: '600' }}>✨ {item.variation}</span>}
               </div>
               <button
                 onClick={() => deleteItem(item._id)}
