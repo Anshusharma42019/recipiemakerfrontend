@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { MdInventory, MdEdit, MdDelete, MdClose, MdAdd, MdWarning } from 'react-icons/md';
 
 const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://localhost:5000/api';
 
@@ -100,10 +101,19 @@ const RawMaterials = () => {
   };
 
   return (
-    <div style={{ padding: '40px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
-        <h1 style={{ fontSize: '32px', fontWeight: '700', color: '#2d3436', margin: 0 }}>
-          📦 Raw Materials
+    <div style={{ padding: '15px', background: '#f8f9fa', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ 
+        position: 'sticky',
+        top: 0,
+        background: '#f8f9fa',
+        zIndex: 10,
+        paddingBottom: '20px',
+        marginBottom: '10px',
+        borderBottom: '2px solid #e9ecef'
+      }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h1 style={{ fontSize: '28px', fontWeight: '700', color: '#2d3436', margin: 0 }}>
+          <MdInventory style={{ verticalAlign: 'middle' }} /> Raw Materials
         </h1>
         <motion.button
           whileHover={{ scale: 1.05 }}
@@ -114,18 +124,19 @@ const RawMaterials = () => {
             setFormData({ recipeName: '', variation: '', ingredients: [{ inventoryId: '', quantity: '' }] });
           }}
           style={{
-            padding: '12px 24px',
+            padding: '10px 20px',
             background: 'linear-gradient(135deg, #fd79a8 0%, #a29bfe 100%)',
             color: 'white',
             border: 'none',
-            borderRadius: '10px',
-            fontSize: '16px',
+            borderRadius: '8px',
+            fontSize: '14px',
             fontWeight: '600',
             cursor: 'pointer'
           }}
         >
           + Add Recipe
         </motion.button>
+      </div>
       </div>
 
       {showForm && (
@@ -140,7 +151,7 @@ const RawMaterials = () => {
             marginBottom: '30px'
           }}
         >
-          <h3 style={{ marginTop: 0, color: '#2d3436' }}>{editingId ? '✏️ Edit Recipe' : '🍕 Add New Recipe'}</h3>
+          <h3 style={{ marginTop: 0, color: '#2d3436', fontSize: '18px', fontWeight: '600' }}>{editingId ? <><MdEdit style={{ verticalAlign: 'middle' }} /> Edit Recipe</> : <>Add New Recipe</>}</h3>
           <input
             type="text"
             placeholder="Recipe name (e.g., Pizza)"
@@ -218,7 +229,7 @@ const RawMaterials = () => {
                     fontWeight: '600'
                   }}
                 >
-                  ✕
+                  <MdClose />
                 </button>
               )}
             </div>
@@ -238,7 +249,7 @@ const RawMaterials = () => {
               marginBottom: '20px'
             }}
           >
-            + Add Ingredient
+            <MdAdd /> Add Ingredient
           </button>
 
           <div style={{ display: 'flex', gap: '10px' }}>
@@ -278,7 +289,7 @@ const RawMaterials = () => {
         </motion.div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 350px), 1fr))', gap: '15px' }}>
         {items.map((item) => (
           <motion.div
             key={item._id}
@@ -287,7 +298,7 @@ const RawMaterials = () => {
             whileHover={{ y: -5 }}
             style={{
               background: 'white',
-              padding: '20px',
+              padding: '16px',
               borderRadius: '12px',
               boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
               border: '2px solid #e0e0e0'
@@ -295,8 +306,8 @@ const RawMaterials = () => {
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '15px' }}>
               <div>
-                <h3 style={{ margin: 0, color: '#2d3436', fontSize: '20px' }}>🍕 {item.recipeName}</h3>
-                {item.variation && <p style={{ margin: '4px 0 0 0', color: '#636e72', fontSize: '14px' }}>{item.variation}</p>}
+                <h3 style={{ margin: 0, color: '#2d3436', fontSize: '16px', fontWeight: '600' }}>{item.recipeName}</h3>
+                {item.variation && <p style={{ margin: '4px 0 0 0', color: '#636e72', fontSize: '13px' }}>{item.variation}</p>}
               </div>
               <div style={{ display: 'flex', gap: '8px' }}>
                 <button
@@ -305,14 +316,14 @@ const RawMaterials = () => {
                     background: '#74b9ff',
                     color: 'white',
                     border: 'none',
-                    borderRadius: '8px',
-                    padding: '6px 12px',
+                    borderRadius: '6px',
+                    padding: '5px 10px',
                     cursor: 'pointer',
                     fontWeight: '600',
                     fontSize: '12px'
                   }}
                 >
-                  Edit
+                  <MdEdit /> Edit
                 </button>
                 <button
                   onClick={() => deleteItem(item._id)}
@@ -320,20 +331,20 @@ const RawMaterials = () => {
                     background: '#ff6348',
                     color: 'white',
                     border: 'none',
-                    borderRadius: '8px',
-                    padding: '6px 12px',
+                    borderRadius: '6px',
+                    padding: '5px 10px',
                     cursor: 'pointer',
                     fontWeight: '600',
                     fontSize: '12px'
                   }}
                 >
-                  Delete
+                  <MdDelete /> Delete
                 </button>
               </div>
             </div>
             
             <div style={{ borderTop: '1px solid #e0e0e0', paddingTop: '10px' }}>
-              <p style={{ fontSize: '13px', color: '#636e72', fontWeight: '600', marginBottom: '8px' }}>Ingredients:</p>
+              <p style={{ fontSize: '12px', color: '#636e72', fontWeight: '600', marginBottom: '8px' }}>Ingredients:</p>
               {item.ingredients?.map((ing, idx) => (
                 <div key={idx} style={{ 
                   display: 'flex', 
@@ -341,11 +352,11 @@ const RawMaterials = () => {
                   padding: '6px 0',
                   borderBottom: idx < item.ingredients.length - 1 ? '1px solid #f0f0f0' : 'none'
                 }}>
-                  <span style={{ fontSize: '14px', color: '#2d3436' }}>
-                    {isLowStock(ing) && '⚠️ '}
+                  <span style={{ fontSize: '13px', color: '#2d3436' }}>
+                    {isLowStock(ing) && <MdWarning style={{ color: '#ff6348', verticalAlign: 'middle' }} />}
                     {ing.inventoryId?.name}
                   </span>
-                  <span style={{ fontSize: '14px', color: isLowStock(ing) ? '#ff6348' : '#636e72', fontWeight: '600' }}>
+                  <span style={{ fontSize: '13px', color: isLowStock(ing) ? '#ff6348' : '#636e72', fontWeight: '600' }}>
                     {ing.quantity} {ing.inventoryId?.unit}
                   </span>
                 </div>

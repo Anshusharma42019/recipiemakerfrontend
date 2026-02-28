@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { MdRestaurant, MdPerson, MdTimer, MdRestaurantMenu, MdClose, MdAdd, MdDelete } from 'react-icons/md';
+import { GiCookingPot } from 'react-icons/gi';
 
 const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://localhost:5000/api';
 
@@ -124,25 +126,36 @@ const Recipes = () => {
 
   return (
     <div style={{ 
-      padding: '40px', 
-      background: 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(https://images.unsplash.com/photo-1547592166-23ac45744acd?w=1920&q=80) center/cover fixed',
-      minHeight: '100vh' 
+      padding: '15px', 
+      background: '#f8f9fa',
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column'
     }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
-        <h1 style={{ fontSize: '32px', fontWeight: '700', color: 'white', margin: 0, display: 'flex', alignItems: 'center', gap: '10px' }}>
-          🍲 Recipes
+      <div style={{ 
+        position: 'sticky',
+        top: 0,
+        background: '#f8f9fa',
+        zIndex: 10,
+        paddingBottom: '20px',
+        marginBottom: '10px',
+        borderBottom: '2px solid #e9ecef'
+      }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h1 style={{ fontSize: '28px', fontWeight: '700', color: '#2d3436', margin: 0, display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <MdRestaurant /> Recipes
         </h1>
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setShowForm(!showForm)}
           style={{
-            padding: '12px 24px',
+            padding: '10px 20px',
             background: 'linear-gradient(135deg, #55efc4 0%, #81ecec 100%)',
             color: '#2d3436',
             border: 'none',
-            borderRadius: '10px',
-            fontSize: '16px',
+            borderRadius: '8px',
+            fontSize: '14px',
             fontWeight: '600',
             cursor: 'pointer'
           }}
@@ -150,28 +163,28 @@ const Recipes = () => {
           + Add Recipe
         </motion.button>
       </div>
+      </div>
 
       {showForm && (
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           style={{
-            background: 'rgba(255, 255, 255, 0.15)',
-            backdropFilter: 'blur(10px)',
+            background: 'white',
             padding: '30px',
             borderRadius: '15px',
-            boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
             marginBottom: '30px',
-            border: '1px solid rgba(255, 255, 255, 0.2)'
+            border: '1px solid #e9ecef'
           }}
         >
-          <h3 style={{ marginTop: 0, color: 'white', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            👩‍🍳 Create New Recipe
+          <h3 style={{ marginTop: 0, color: '#2d3436', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '18px', fontWeight: '600' }}>
+            <MdPerson /> Create New Recipe
           </h3>
           
           {rawMaterials.length > 0 && (
             <div style={{ marginBottom: '15px' }}>
-              <label style={{ color: 'white', fontSize: '14px', marginBottom: '8px', display: 'block' }}>Select from Raw Materials:</label>
+              <label style={{ color: '#2d3436', fontSize: '14px', marginBottom: '8px', display: 'block' }}>Select from Raw Materials:</label>
               <select
                 onChange={(e) => {
                   const rm = rawMaterials.find(r => r._id === e.target.value);
@@ -265,7 +278,7 @@ const Recipes = () => {
           />
 
           <h4 style={{ color: '#2d3436', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            🥗 Ingredients
+            <MdRestaurantMenu /> Ingredients
           </h4>
           {formData.ingredients.map((ing, idx) => (
             <div key={idx} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr auto', gap: '10px', marginBottom: '10px' }}>
@@ -315,15 +328,14 @@ const Recipes = () => {
                 onClick={() => removeIngredient(idx)}
                 style={{
                   padding: '10px 15px',
-                  background: 'rgba(255, 71, 87, 0.8)',
-                  backdropFilter: 'blur(10px)',
+                  background: '#ff4757',
                   color: 'white',
-                  border: '1px solid rgba(255, 255, 255, 0.3)',
+                  border: 'none',
                   borderRadius: '8px',
                   cursor: 'pointer'
                 }}
               >
-                ✕
+                <MdClose />
               </button>
             </div>
           ))}
@@ -331,17 +343,16 @@ const Recipes = () => {
               onClick={addIngredient}
               style={{
                 padding: '10px 20px',
-                background: 'rgba(255, 255, 255, 0.2)',
-                backdropFilter: 'blur(10px)',
+                background: '#667eea',
                 color: 'white',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
+                border: 'none',
                 borderRadius: '8px',
                 cursor: 'pointer',
                 marginBottom: '20px',
                 fontWeight: '600'
               }}
             >
-              + Add Ingredient
+              <MdAdd /> Add Ingredient
             </button>
 
           <div style={{ display: 'flex', gap: '10px' }}>
@@ -349,10 +360,9 @@ const Recipes = () => {
               onClick={createRecipe}
               style={{
                 padding: '10px 20px',
-                background: 'rgba(85, 239, 196, 0.8)',
-                backdropFilter: 'blur(10px)',
+                background: '#55efc4',
                 color: 'white',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
+                border: 'none',
                 borderRadius: '8px',
                 cursor: 'pointer',
                 fontWeight: '600'
@@ -364,10 +374,9 @@ const Recipes = () => {
               onClick={() => setShowForm(false)}
               style={{
                 padding: '10px 20px',
-                background: 'rgba(255, 255, 255, 0.2)',
-                backdropFilter: 'blur(10px)',
-                color: 'white',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
+                background: '#e9ecef',
+                color: '#495057',
+                border: 'none',
                 borderRadius: '8px',
                 cursor: 'pointer',
                 fontWeight: '600'
@@ -379,7 +388,7 @@ const Recipes = () => {
         </motion.div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 350px), 1fr))', gap: '15px' }}>
         {recipes.map((recipe) => (
           <motion.div
             key={recipe._id}
@@ -387,28 +396,27 @@ const Recipes = () => {
             animate={{ opacity: 1, scale: 1 }}
             whileHover={{ y: -5 }}
             style={{
-              background: 'rgba(255, 255, 255, 0.15)',
-              backdropFilter: 'blur(10px)',
-              padding: '25px',
-              borderRadius: '15px',
-              boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
-              border: '1px solid rgba(255, 255, 255, 0.2)'
+              background: 'white',
+              padding: window.innerWidth < 768 ? '16px' : '20px',
+              borderRadius: '12px',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+              border: '1px solid #e9ecef'
             }}
           >
-            <h3 style={{ margin: '0 0 15px 0', color: 'white', fontSize: '22px', fontWeight: '700' }}>
-              🍴 {recipe.title}
+            <h3 style={{ margin: '0 0 12px 0', color: '#2d3436', fontSize: '16px', fontWeight: '600' }}>
+              <MdRestaurantMenu style={{ verticalAlign: 'middle' }} /> {recipe.title}
             </h3>
             
-            <div style={{ marginBottom: '15px', background: 'rgba(255,255,255,0.2)', padding: '15px', borderRadius: '10px' }}>
-              <strong style={{ color: 'white', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                🥘 Ingredients:
+            <div style={{ marginBottom: '12px', background: '#f8f9fa', padding: '12px', borderRadius: '8px' }}>
+              <strong style={{ color: '#2d3436', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <MdRestaurantMenu /> Ingredients:
               </strong>
-              <ul style={{ margin: '5px 0', paddingLeft: '20px', color: 'rgba(255, 255, 255, 0.9)', fontSize: '14px' }}>
+              <ul style={{ margin: '5px 0', paddingLeft: '20px', color: '#495057', fontSize: '13px' }}>
                 {recipe.ingredients?.map((ing, idx) => {
                   const invItem = inventory.find(i => i._id === ing.inventoryId?._id);
                   const hasEnough = invItem && invItem.quantity >= ing.quantity;
                   return (
-                    <li key={idx} style={{ color: '#00ff88', fontWeight: hasEnough ? 'normal' : '600' }}>
+                    <li key={idx} style={{ color: '#00b894', fontWeight: hasEnough ? 'normal' : '600' }}>
                       {ing.inventoryId?.name || 'Unknown'} - {ing.quantity} {ing.unit}
                       {!hasEnough && ` ⚠️ (only ${invItem?.quantity || 0} available)`}
                     </li>
@@ -418,14 +426,14 @@ const Recipes = () => {
             </div>
 
             {recipe.instructions && (
-              <p style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '14px', marginBottom: '10px', background: 'rgba(255,255,255,0.2)', padding: '10px', borderRadius: '8px' }}>
-                <strong style={{ color: 'white' }}>📖 Instructions:</strong> {recipe.instructions}
+              <p style={{ color: '#495057', fontSize: '13px', marginBottom: '10px', background: '#f8f9fa', padding: '8px', borderRadius: '8px' }}>
+                <strong style={{ color: '#2d3436' }}>Instructions:</strong> {recipe.instructions}
               </p>
             )}
 
-            <div style={{ display: 'flex', gap: '10px', fontSize: '13px', color: 'rgba(255, 255, 255, 0.9)', marginBottom: '15px', fontWeight: '600' }}>
-              {recipe.cookTime && <span>⏱️ {recipe.cookTime} min</span>}
-              {recipe.servings && <span>🍽️ {recipe.servings} servings</span>}
+            <div style={{ display: 'flex', gap: '10px', fontSize: '12px', color: '#636e72', marginBottom: '12px', fontWeight: '600' }}>
+              {recipe.cookTime && <span><MdTimer style={{ verticalAlign: 'middle' }} /> {recipe.cookTime} min</span>}
+              {recipe.servings && <span>{recipe.servings} servings</span>}
             </div>
 
             <div style={{ display: 'flex', gap: '10px' }}>
@@ -434,34 +442,34 @@ const Recipes = () => {
                 disabled={!canCookRecipe(recipe) || cookingRecipe === recipe._id}
                 style={{
                   flex: 1,
-                  padding: '12px',
-                  background: canCookRecipe(recipe) && cookingRecipe !== recipe._id ? 'rgba(0, 184, 148, 0.8)' : 'rgba(100, 100, 100, 0.5)',
-                  backdropFilter: 'blur(10px)',
+                  padding: '8px',
+                  background: canCookRecipe(recipe) && cookingRecipe !== recipe._id ? '#00b894' : '#95a5a6',
                   color: 'white',
-                  border: '1px solid rgba(255, 255, 255, 0.3)',
-                  borderRadius: '8px',
+                  border: 'none',
+                  borderRadius: '6px',
                   cursor: canCookRecipe(recipe) && cookingRecipe !== recipe._id ? 'pointer' : 'not-allowed',
                   fontWeight: '600',
+                  fontSize: '13px',
                   opacity: canCookRecipe(recipe) && cookingRecipe !== recipe._id ? 1 : 0.5,
                   pointerEvents: canCookRecipe(recipe) && cookingRecipe !== recipe._id ? 'auto' : 'none'
                 }}
               >
-                {cookingRecipe === recipe._id ? '🍳 Cooking...' : `🍳 Cook ${!canCookRecipe(recipe) ? '(Not enough ingredients)' : ''}`}
+                {cookingRecipe === recipe._id ? <><GiCookingPot /> Cooking...</> : <><GiCookingPot /> Cook {!canCookRecipe(recipe) ? '(Not enough ingredients)' : ''}</>}
               </button>
               <button
                 onClick={() => deleteRecipe(recipe._id)}
                 style={{
-                  padding: '12px 20px',
-                  background: 'rgba(255, 99, 72, 0.8)',
-                  backdropFilter: 'blur(10px)',
+                  padding: '8px 12px',
+                  background: '#ff4757',
                   color: 'white',
-                  border: '1px solid rgba(255, 255, 255, 0.3)',
-                  borderRadius: '8px',
+                  border: 'none',
+                  borderRadius: '6px',
                   cursor: 'pointer',
-                  fontWeight: '600'
+                  fontWeight: '600',
+                  fontSize: '13px'
                 }}
               >
-                Delete
+                <MdDelete /> Delete
               </button>
             </div>
           </motion.div>
@@ -469,7 +477,7 @@ const Recipes = () => {
       </div>
 
       {recipes.length === 0 && !showForm && (
-        <div style={{ textAlign: 'center', padding: '60px', color: 'white' }}>
+        <div style={{ textAlign: 'center', padding: '60px', color: '#636e72' }}>
           <p style={{ fontSize: '18px' }}>No recipes yet. Click "Add Recipe" to create one!</p>
         </div>
       )}

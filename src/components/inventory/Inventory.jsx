@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { MdKitchen, MdEdit, MdDelete, MdRestaurantMenu } from 'react-icons/md';
 
 const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://localhost:5000/api';
 
@@ -63,14 +64,25 @@ const Inventory = () => {
 
   return (
     <div style={{ 
-      padding: window.innerWidth < 768 ? '20px' : '40px', 
-      background: 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=1920&q=80) center/cover fixed',
-      minHeight: '100vh' 
+      padding: window.innerWidth < 768 ? '15px' : '40px', 
+      background: '#f8f9fa',
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column'
     }}>
-      <div style={{ display: 'flex', flexDirection: window.innerWidth < 768 ? 'column' : 'row', justifyContent: 'space-between', alignItems: window.innerWidth < 768 ? 'flex-start' : 'center', marginBottom: '30px', gap: '15px' }}>
+      <div style={{ 
+        position: 'sticky',
+        top: 0,
+        background: '#f8f9fa',
+        zIndex: 10,
+        paddingBottom: '20px',
+        marginBottom: '10px',
+        borderBottom: '2px solid #e9ecef'
+      }}>
+      <div style={{ display: 'flex', flexDirection: window.innerWidth < 768 ? 'column' : 'row', justifyContent: 'space-between', alignItems: window.innerWidth < 768 ? 'flex-start' : 'center', gap: '15px' }}>
         <div>
-          <h1 style={{ fontSize: window.innerWidth < 768 ? '28px' : '36px', fontWeight: '800', color: 'white', margin: 0 }}>🍳 Inventory</h1>
-          <p style={{ color: 'rgba(255, 255, 255, 0.9)', marginTop: '8px', fontSize: window.innerWidth < 768 ? '12px' : '14px' }}>Manage your kitchen ingredients</p>
+          <h1 style={{ fontSize: window.innerWidth < 768 ? '24px' : '28px', fontWeight: '700', color: '#2d3436', margin: 0 }}><MdKitchen style={{ verticalAlign: 'middle' }} /> Inventory</h1>
+          <p style={{ color: '#636e72', marginTop: '4px', fontSize: '13px' }}>Manage your kitchen ingredients</p>
         </div>
         <motion.button
           whileHover={{ scale: 1.05 }}
@@ -81,12 +93,12 @@ const Inventory = () => {
             setFormData({ name: '', quantity: '', unit: '', category: '', price: '' });
           }}
           style={{
-            padding: '12px 24px',
+            padding: '10px 20px',
             background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             color: 'white',
             border: 'none',
-            borderRadius: '10px',
-            fontSize: window.innerWidth < 768 ? '14px' : '16px',
+            borderRadius: '8px',
+            fontSize: '14px',
             fontWeight: '600',
             cursor: 'pointer',
             width: window.innerWidth < 768 ? '100%' : 'auto'
@@ -95,22 +107,22 @@ const Inventory = () => {
           + Add Item
         </motion.button>
       </div>
+      </div>
 
       {showForm && (
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           style={{
-            background: 'rgba(255, 255, 255, 0.15)',
-            backdropFilter: 'blur(10px)',
+            background: 'white',
             padding: '30px',
             borderRadius: '20px',
-            boxShadow: '0 10px 40px rgba(0,0,0,0.2)',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
             marginBottom: '30px',
-            border: '1px solid rgba(255, 255, 255, 0.2)'
+            border: '1px solid #e9ecef'
           }}
         >
-          <h3 style={{ marginTop: 0, color: 'white', fontSize: window.innerWidth < 768 ? '18px' : '20px', fontWeight: '700' }}>{editingId ? '✏️ Edit Item' : '✨ Add New Item'}</h3>
+          <h3 style={{ marginTop: 0, color: '#2d3436', fontSize: window.innerWidth < 768 ? '16px' : '18px', fontWeight: '600' }}>{editingId ? <><MdEdit style={{ verticalAlign: 'middle' }} /> Edit Item</> : <>Add New Item</>}</h3>
           <div style={{ display: 'grid', gridTemplateColumns: window.innerWidth < 768 ? '1fr' : '2fr 1fr 1fr 1fr 1fr', gap: '15px', marginBottom: '20px' }}>
             <input
               type="text"
@@ -118,10 +130,10 @@ const Inventory = () => {
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               style={{
-                padding: '12px',
+                padding: '10px',
                 border: '2px solid #e0e0e0',
                 borderRadius: '8px',
-                fontSize: '15px',
+                fontSize: '14px',
                 outline: 'none'
               }}
             />
@@ -131,10 +143,10 @@ const Inventory = () => {
               value={formData.quantity}
               onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
               style={{
-                padding: '12px',
+                padding: '10px',
                 border: '2px solid #e0e0e0',
                 borderRadius: '8px',
-                fontSize: '15px',
+                fontSize: '14px',
                 outline: 'none'
               }}
             />
@@ -142,10 +154,10 @@ const Inventory = () => {
               value={formData.unit}
               onChange={(e) => setFormData({ ...formData, unit: e.target.value })}
               style={{
-                padding: '12px',
+                padding: '10px',
                 border: '2px solid #e0e0e0',
                 borderRadius: '8px',
-                fontSize: '15px',
+                fontSize: '14px',
                 outline: 'none',
                 cursor: 'pointer'
               }}
@@ -169,10 +181,10 @@ const Inventory = () => {
               value={formData.price}
               onChange={(e) => setFormData({ ...formData, price: e.target.value })}
               style={{
-                padding: '12px',
+                padding: '10px',
                 border: '2px solid #e0e0e0',
                 borderRadius: '8px',
-                fontSize: '15px',
+                fontSize: '14px',
                 outline: 'none'
               }}
             />
@@ -180,10 +192,10 @@ const Inventory = () => {
               value={formData.category}
               onChange={(e) => setFormData({ ...formData, category: e.target.value })}
               style={{
-                padding: '12px',
+                padding: '10px',
                 border: '2px solid #e0e0e0',
                 borderRadius: '8px',
-                fontSize: '15px',
+                fontSize: '14px',
                 outline: 'none',
                 cursor: 'pointer'
               }}
@@ -207,14 +219,14 @@ const Inventory = () => {
             <button
               onClick={addItem}
               style={{
-                padding: '10px 20px',
-                background: 'rgba(102, 126, 234, 0.8)',
-                backdropFilter: 'blur(10px)',
+                padding: '8px 16px',
+                background: '#667eea',
                 color: 'white',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
+                border: 'none',
                 borderRadius: '8px',
                 cursor: 'pointer',
-                fontWeight: '600'
+                fontWeight: '600',
+                fontSize: '14px'
               }}
             >
               {editingId ? 'Update' : 'Add'}
@@ -226,14 +238,14 @@ const Inventory = () => {
                 setFormData({ name: '', quantity: '', unit: '', category: '', price: '' });
               }}
               style={{
-                padding: '10px 20px',
-                background: 'rgba(255, 255, 255, 0.2)',
-                backdropFilter: 'blur(10px)',
-                color: 'white',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
+                padding: '8px 16px',
+                background: '#e9ecef',
+                color: '#495057',
+                border: 'none',
                 borderRadius: '8px',
                 cursor: 'pointer',
-                fontWeight: '600'
+                fontWeight: '600',
+                fontSize: '14px'
               }}
             >
               Cancel
@@ -242,34 +254,33 @@ const Inventory = () => {
         </motion.div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: window.innerWidth < 480 ? '1fr' : window.innerWidth < 768 ? 'repeat(auto-fill, minmax(250px, 1fr))' : 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: window.innerWidth < 480 ? '1fr' : window.innerWidth < 768 ? 'repeat(auto-fill, minmax(280px, 1fr))' : 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
         {items.map((item) => (
           <motion.div
             key={item._id}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            whileHover={{ y: -8, boxShadow: '0 12px 30px rgba(102, 126, 234, 0.3)' }}
+            whileHover={{ y: -8, boxShadow: '0 4px 12px rgba(0,0,0,0.12)' }}
             transition={{ duration: 0.2 }}
             style={{
-              background: 'rgba(255, 255, 255, 0.15)',
-              backdropFilter: 'blur(10px)',
+              background: 'white',
               padding: window.innerWidth < 768 ? '16px' : '24px',
               borderRadius: '16px',
-              boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
               display: 'flex',
               flexDirection: window.innerWidth < 480 ? 'column' : 'row',
               justifyContent: 'space-between',
               alignItems: window.innerWidth < 480 ? 'flex-start' : 'center',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
+              border: '1px solid #e9ecef',
               gap: '12px'
             }}
           >
             <div>
-              <h3 style={{ margin: '0 0 10px 0', color: 'white', fontSize: window.innerWidth < 768 ? '18px' : '20px', fontWeight: '700', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)' }}>{item.name}</h3>
-              <p style={{ margin: '0 0 6px 0', color: 'white', fontSize: window.innerWidth < 768 ? '14px' : '15px', fontWeight: '600', textShadow: '1px 1px 3px rgba(0, 0, 0, 0.8)' }}>
+              <h3 style={{ margin: '0 0 8px 0', color: '#2d3436', fontSize: window.innerWidth < 768 ? '16px' : '18px', fontWeight: '600' }}>{item.name}</h3>
+              <p style={{ margin: '0 0 6px 0', color: '#636e72', fontSize: '13px', fontWeight: '500' }}>
                 {item.quantity} {item.unit} {item.price > 0 && `• $${item.price}`}
               </p>
-              {item.category && <span style={{ fontSize: '13px', color: 'white', marginTop: '4px', display: 'inline-block', background: 'rgba(255, 255, 255, 0.25)', padding: '4px 12px', borderRadius: '20px', fontWeight: '600', textShadow: '1px 1px 2px rgba(0, 0, 0, 0.7)' }}>📦 {item.category}</span>}
+              {item.category && <span style={{ fontSize: '12px', color: '#667eea', marginTop: '4px', display: 'inline-block', background: '#f0f0ff', padding: '3px 10px', borderRadius: '12px', fontWeight: '600' }}><MdRestaurantMenu style={{ verticalAlign: 'middle' }} /> {item.category}</span>}
             </div>
             <div style={{ display: 'flex', gap: '8px', width: window.innerWidth < 480 ? '100%' : 'auto' }}>
               <button
@@ -278,14 +289,15 @@ const Inventory = () => {
                   background: '#5f27cd',
                   color: 'white',
                   border: 'none',
-                  borderRadius: '8px',
-                  padding: '8px 16px',
+                  borderRadius: '6px',
+                  padding: '6px 12px',
                   cursor: 'pointer',
                   fontWeight: '600',
+                  fontSize: '13px',
                   flex: window.innerWidth < 480 ? '1' : 'none'
                 }}
               >
-                Edit
+                <MdEdit /> Edit
               </button>
               <button
                 onClick={() => deleteItem(item._id)}
@@ -293,14 +305,15 @@ const Inventory = () => {
                   background: '#ff4757',
                   color: 'white',
                   border: 'none',
-                  borderRadius: '8px',
-                  padding: '8px 16px',
+                  borderRadius: '6px',
+                  padding: '6px 12px',
                   cursor: 'pointer',
                   fontWeight: '600',
+                  fontSize: '13px',
                   flex: window.innerWidth < 480 ? '1' : 'none'
                 }}
               >
-                Delete
+                <MdDelete /> Delete
               </button>
             </div>
           </motion.div>
@@ -311,11 +324,11 @@ const Inventory = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          style={{ textAlign: 'center', padding: '80px', background: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(10px)', borderRadius: '20px', boxShadow: '0 4px 15px rgba(0,0,0,0.1)', border: '1px solid rgba(255, 255, 255, 0.2)' }}
+          style={{ textAlign: 'center', padding: '80px', background: 'white', borderRadius: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)', border: '1px solid #e9ecef' }}
         >
-          <div style={{ fontSize: '64px', marginBottom: '20px' }}>🍽️</div>
-          <p style={{ fontSize: '20px', color: 'white', fontWeight: '600' }}>Your inventory is empty</p>
-          <p style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.8)', marginTop: '8px' }}>Click "Add Item" to start managing your ingredients!</p>
+          <div style={{ fontSize: '64px', marginBottom: '20px' }}><MdKitchen /></div>
+          <p style={{ fontSize: '20px', color: '#2d3436', fontWeight: '600' }}>Your inventory is empty</p>
+          <p style={{ fontSize: '14px', color: '#636e72', marginTop: '8px' }}>Click "Add Item" to start managing your ingredients!</p>
         </motion.div>
       )}
     </div>

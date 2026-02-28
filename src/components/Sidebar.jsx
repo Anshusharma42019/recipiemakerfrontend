@@ -1,28 +1,25 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { MdRestaurantMenu, MdInventory, MdFactory, MdSettings } from 'react-icons/md';
 
 const Sidebar = ({ activeTab, setActiveTab, onLogout }) => {
   const menuItems = [
-    { id: 'recipes', label: 'Recipes', icon: '📖' },
-    { id: 'inventory', label: 'Inventory', icon: '📦' },
-    { id: 'rawmaterials', label: 'Raw Materials', icon: '🏭' },
-    { id: 'settings', label: 'Settings', icon: '⚙️' }
+    { id: 'recipes', label: 'Recipes', Icon: MdRestaurantMenu },
+    { id: 'inventory', label: 'Inventory', Icon: MdInventory },
+    { id: 'rawmaterials', label: 'Raw Materials', Icon: MdFactory },
+    { id: 'settings', label: 'Settings', Icon: MdSettings }
   ];
 
   return (
     <div style={{ 
       width: '250px', 
-      background: 'url(https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&q=80) center/cover',
+      background: '#2d3436',
       height: '100vh', 
       display: 'flex', 
       flexDirection: 'column', 
-      boxShadow: '2px 0 10px rgba(0,0,0,0.1)',
-      backdropFilter: 'blur(10px)',
-      position: 'relative'
+      boxShadow: '2px 0 10px rgba(0,0,0,0.1)'
     }}>
-      <div style={{ position: 'absolute', inset: 0, backdropFilter: 'blur(8px)', background: 'rgba(0,0,0,0.3)', zIndex: 0 }} />
-      <div style={{ position: 'relative', zIndex: 1, height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <div style={{ padding: '30px 20px', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>
+      <div style={{ padding: '30px 20px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
         <h2 style={{ color: 'white', margin: 0, fontSize: '24px', fontWeight: '700' }}>Recipe Maker</h2>
       </div>
       
@@ -37,7 +34,7 @@ const Sidebar = ({ activeTab, setActiveTab, onLogout }) => {
               margin: '5px 10px',
               borderRadius: '10px',
               cursor: 'pointer',
-              background: activeTab === item.id ? 'rgba(255,255,255,0.2)' : 'transparent',
+              background: activeTab === item.id ? 'rgba(255,255,255,0.15)' : 'transparent',
               color: 'white',
               display: 'flex',
               alignItems: 'center',
@@ -47,7 +44,7 @@ const Sidebar = ({ activeTab, setActiveTab, onLogout }) => {
               transition: 'all 0.3s'
             }}
           >
-            <span style={{ fontSize: '20px' }}>{item.icon}</span>
+            <span style={{ fontSize: '20px' }}><item.Icon /></span>
             {item.label}
           </motion.div>
         ))}
@@ -61,9 +58,9 @@ const Sidebar = ({ activeTab, setActiveTab, onLogout }) => {
           style={{
             width: '100%',
             padding: '12px',
-            background: 'rgba(255,255,255,0.2)',
+            background: 'rgba(255,255,255,0.1)',
             color: 'white',
-            border: '1px solid rgba(255,255,255,0.3)',
+            border: '1px solid rgba(255,255,255,0.2)',
             borderRadius: '10px',
             fontSize: '16px',
             fontWeight: '600',
@@ -72,7 +69,6 @@ const Sidebar = ({ activeTab, setActiveTab, onLogout }) => {
         >
           Logout
         </motion.button>
-      </div>
       </div>
     </div>
   );
