@@ -25,6 +25,10 @@ const Inventory = () => {
 
   useEffect(() => {
     fetchItems();
+    
+    // Auto-refresh every 3 seconds
+    const interval = setInterval(fetchItems, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   const fetchItems = async () => {

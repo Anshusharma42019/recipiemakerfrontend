@@ -8,6 +8,7 @@ const Recipes = () => {
   const [inventory, setInventory] = useState([]);
   const [rawMaterials, setRawMaterials] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [cookingRecipe, setCookingRecipe] = useState(null);
   const [formData, setFormData] = useState({ title: '', instructions: '', cookTime: '', servings: '', ingredients: [] });
 
   useEffect(() => {
@@ -89,16 +90,27 @@ const Recipes = () => {
   };
 
   const cookRecipe = async (id) => {
-    const res = await fetch(`${API_URL}/recipes/${id}/cook`, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-    });
-    const data = await res.json();
-    if (res.ok) {
-      alert('Recipe cooked successfully! Ingredients deducted from inventory.');
-      fetchInventory();
-    } else {
-      alert(data.error || 'Failed to cook recipe');
+    try {
+      setCookingRecipe(id);
+      const res = await fetch(`${API_URL}/recipes/${id}/cook`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}` 
+        }
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert('Recipe cooked successfully! Ingredients deducted from inventory.');
+        await fetchRecipes();
+        await fetchInventory();
+      } else {
+        alert(data.error || 'Failed to cook recipe');
+      }
+    } catch (error) {
+      alert('Error cooking recipe: ' + error.message);
+    } finally {
+      setCookingRecipe(null);
     }
   };
 
@@ -419,21 +431,22 @@ const Recipes = () => {
             <div style={{ display: 'flex', gap: '10px' }}>
               <button
                 onClick={() => cookRecipe(recipe._id)}
-                disabled={!canCookRecipe(recipe)}
+                disabled={!canCookRecipe(recipe) || cookingRecipe === recipe._id}
                 style={{
                   flex: 1,
                   padding: '12px',
-                  background: canCookRecipe(recipe) ? 'rgba(0, 184, 148, 0.8)' : 'rgba(255, 255, 255, 0.2)',
+                  background: canCookRecipe(recipe) && cookingRecipe !== recipe._id ? 'rgba(0, 184, 148, 0.8)' : 'rgba(100, 100, 100, 0.5)',
                   backdropFilter: 'blur(10px)',
                   color: 'white',
                   border: '1px solid rgba(255, 255, 255, 0.3)',
                   borderRadius: '8px',
-                  cursor: canCookRecipe(recipe) ? 'pointer' : 'not-allowed',
+                  cursor: canCookRecipe(recipe) && cookingRecipe !== recipe._id ? 'pointer' : 'not-allowed',
                   fontWeight: '600',
-                  opacity: canCookRecipe(recipe) ? 1 : 0.6
+                  opacity: canCookRecipe(recipe) && cookingRecipe !== recipe._id ? 1 : 0.5,
+                  pointerEvents: canCookRecipe(recipe) && cookingRecipe !== recipe._id ? 'auto' : 'none'
                 }}
               >
-                🍳 Cook {!canCookRecipe(recipe) && '(Not enough ingredients)'}
+                {cookingRecipe === recipe._id ? '🍳 Cooking...' : `🍳 Cook ${!canCookRecipe(recipe) ? '(Not enough ingredients)' : ''}`}
               </button>
               <button
                 onClick={() => deleteRecipe(recipe._id)}
