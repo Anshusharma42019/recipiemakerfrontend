@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { MdRestaurantMenu, MdInventory, MdFactory, MdSettings, MdLogout } from 'react-icons/md';
+import { MdRestaurantMenu, MdInventory, MdFactory, MdSettings } from 'react-icons/md';
+import { BiLogOut } from 'react-icons/bi';
 import Register from './components/Register';
 import Login from './components/Login';
 import Sidebar from './components/Sidebar';
@@ -89,7 +90,7 @@ const App = () => {
             <span style={{ fontSize: '11px', color: activeTab === 'settings' ? '#667eea' : '#95a5a6', fontWeight: activeTab === 'settings' ? '600' : '400', marginTop: '2px' }}>Settings</span>
           </div>
           <div onClick={handleLogout} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', flex: 1, padding: '4px' }}>
-            <MdLogout style={{ fontSize: '22px', color: '#95a5a6' }} />
+            <BiLogOut style={{ fontSize: '22px', color: '#95a5a6' }} />
             <span style={{ fontSize: '11px', color: '#95a5a6', marginTop: '2px' }}>Logout</span>
           </div>
         </div>
