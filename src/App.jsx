@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { MdRestaurantMenu, MdInventory, MdFactory, MdSettings, MdLogout } from 'react-icons/md';
 import Register from './components/Register';
 import Login from './components/Login';
 import Sidebar from './components/Sidebar';
@@ -63,32 +64,33 @@ const App = () => {
           bottom: 0,
           left: 0,
           right: 0,
-          background: '#1e272e',
+          background: 'white',
           display: 'flex',
           justifyContent: 'space-around',
-          padding: '10px 0',
-          boxShadow: '0 -2px 10px rgba(0,0,0,0.3)',
-          zIndex: 1000
+          padding: '8px 0 12px 0',
+          boxShadow: '0 -2px 10px rgba(0,0,0,0.1)',
+          zIndex: 1000,
+          borderTop: '1px solid #e9ecef'
         }}>
-          <div onClick={() => setActiveTab('recipes')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', flex: 1 }}>
-            <span style={{ fontSize: '24px', marginBottom: '4px' }}>📖</span>
-            <span style={{ fontSize: '12px', color: activeTab === 'recipes' ? '#3498db' : '#95a5a6', fontWeight: activeTab === 'recipes' ? '600' : '400' }}>Recipes</span>
+          <div onClick={() => setActiveTab('recipes')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', flex: 1, padding: '4px' }}>
+            <MdRestaurantMenu style={{ fontSize: '22px', color: activeTab === 'recipes' ? '#667eea' : '#95a5a6' }} />
+            <span style={{ fontSize: '11px', color: activeTab === 'recipes' ? '#667eea' : '#95a5a6', fontWeight: activeTab === 'recipes' ? '600' : '400', marginTop: '2px' }}>Recipes</span>
           </div>
-          <div onClick={() => setActiveTab('inventory')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', flex: 1 }}>
-            <span style={{ fontSize: '24px', marginBottom: '4px' }}>📦</span>
-            <span style={{ fontSize: '12px', color: activeTab === 'inventory' ? '#3498db' : '#95a5a6', fontWeight: activeTab === 'inventory' ? '600' : '400' }}>Inventory</span>
+          <div onClick={() => setActiveTab('inventory')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', flex: 1, padding: '4px' }}>
+            <MdInventory style={{ fontSize: '22px', color: activeTab === 'inventory' ? '#667eea' : '#95a5a6' }} />
+            <span style={{ fontSize: '11px', color: activeTab === 'inventory' ? '#667eea' : '#95a5a6', fontWeight: activeTab === 'inventory' ? '600' : '400', marginTop: '2px' }}>Inventory</span>
           </div>
-          <div onClick={() => setActiveTab('rawmaterials')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', flex: 1 }}>
-            <span style={{ fontSize: '24px', marginBottom: '4px' }}>🏭</span>
-            <span style={{ fontSize: '12px', color: activeTab === 'rawmaterials' ? '#3498db' : '#95a5a6', fontWeight: activeTab === 'rawmaterials' ? '600' : '400' }}>Materials</span>
+          <div onClick={() => setActiveTab('rawmaterials')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', flex: 1, padding: '4px' }}>
+            <MdFactory style={{ fontSize: '22px', color: activeTab === 'rawmaterials' ? '#667eea' : '#95a5a6' }} />
+            <span style={{ fontSize: '11px', color: activeTab === 'rawmaterials' ? '#667eea' : '#95a5a6', fontWeight: activeTab === 'rawmaterials' ? '600' : '400', marginTop: '2px' }}>Materials</span>
           </div>
-          <div onClick={() => setActiveTab('settings')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', flex: 1 }}>
-            <span style={{ fontSize: '24px', marginBottom: '4px' }}>⚙️</span>
-            <span style={{ fontSize: '12px', color: activeTab === 'settings' ? '#3498db' : '#95a5a6', fontWeight: activeTab === 'settings' ? '600' : '400' }}>Settings</span>
+          <div onClick={() => setActiveTab('settings')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', flex: 1, padding: '4px' }}>
+            <MdSettings style={{ fontSize: '22px', color: activeTab === 'settings' ? '#667eea' : '#95a5a6' }} />
+            <span style={{ fontSize: '11px', color: activeTab === 'settings' ? '#667eea' : '#95a5a6', fontWeight: activeTab === 'settings' ? '600' : '400', marginTop: '2px' }}>Settings</span>
           </div>
-          <div onClick={handleLogout} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', flex: 1 }}>
-            <span style={{ fontSize: '24px', marginBottom: '4px' }}>🚪</span>
-            <span style={{ fontSize: '12px', color: '#95a5a6' }}>Logout</span>
+          <div onClick={handleLogout} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', flex: 1, padding: '4px' }}>
+            <MdLogout style={{ fontSize: '22px', color: '#95a5a6' }} />
+            <span style={{ fontSize: '11px', color: '#95a5a6', marginTop: '2px' }}>Logout</span>
           </div>
         </div>
       )}
