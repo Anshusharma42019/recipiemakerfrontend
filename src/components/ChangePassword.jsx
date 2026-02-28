@@ -10,7 +10,7 @@ const ChangePassword = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`${import.meta.env.VITE_MONGO_API}/api/auth/change-password`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/change-password`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',
