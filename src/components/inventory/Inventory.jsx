@@ -71,17 +71,20 @@ const Inventory = () => {
       flexDirection: 'column'
     }}>
       <div style={{ 
-        position: 'sticky',
+        position: 'fixed',
         top: 0,
+        left: window.innerWidth < 768 ? 0 : '250px',
+        right: 0,
         background: '#f8f9fa',
         zIndex: 10,
-        paddingBottom: '20px',
-        marginBottom: '10px',
+        padding: window.innerWidth < 768 ? '15px' : '20px 40px',
         borderBottom: '2px solid #e9ecef'
       }}>
       <div style={{ display: 'flex', flexDirection: window.innerWidth < 768 ? 'column' : 'row', justifyContent: 'space-between', alignItems: window.innerWidth < 768 ? 'flex-start' : 'center', gap: '15px' }}>
         <div>
-          <h1 style={{ fontSize: window.innerWidth < 768 ? '24px' : '28px', fontWeight: '700', color: '#2d3436', margin: 0 }}><MdKitchen style={{ verticalAlign: 'middle' }} /> Inventory</h1>
+          <h1 style={{ fontSize: window.innerWidth < 768 ? '24px' : '28px', fontWeight: '700', color: '#2d3436', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <MdKitchen style={{ fontSize: window.innerWidth < 768 ? '24px' : '28px' }} /> Inventory
+          </h1>
           <p style={{ color: '#636e72', marginTop: '4px', fontSize: '13px' }}>Manage your kitchen ingredients</p>
         </div>
         <motion.button
@@ -109,6 +112,7 @@ const Inventory = () => {
       </div>
       </div>
 
+      <div style={{ marginTop: window.innerWidth < 768 ? '135px' : '100px' }}>
       {showForm && (
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -318,6 +322,7 @@ const Inventory = () => {
             </div>
           </motion.div>
         ))}
+      </div>
       </div>
 
       {items.length === 0 && !showForm && (

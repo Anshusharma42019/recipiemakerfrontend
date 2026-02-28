@@ -102,20 +102,30 @@ const RawMaterials = () => {
   };
 
   return (
-    <div style={{ padding: '15px', background: '#f8f9fa', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ 
+      padding: window.innerWidth < 768 ? '15px' : '40px', 
+      background: '#f8f9fa',
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column'
+    }}>
       <div style={{ 
-        position: 'sticky',
+        position: 'fixed',
         top: 0,
+        left: window.innerWidth < 768 ? 0 : '250px',
+        right: 0,
         background: '#f8f9fa',
         zIndex: 10,
-        paddingBottom: '20px',
-        marginBottom: '10px',
+        padding: window.innerWidth < 768 ? '15px' : '20px 40px',
         borderBottom: '2px solid #e9ecef'
       }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1 style={{ fontSize: '28px', fontWeight: '700', color: '#2d3436', margin: 0 }}>
-          <MdInventory style={{ verticalAlign: 'middle' }} /> Raw Materials
-        </h1>
+      <div style={{ display: 'flex', flexDirection: window.innerWidth < 768 ? 'column' : 'row', justifyContent: 'space-between', alignItems: window.innerWidth < 768 ? 'flex-start' : 'center', gap: '15px' }}>
+        <div>
+          <h1 style={{ fontSize: window.innerWidth < 768 ? '24px' : '28px', fontWeight: '700', color: '#2d3436', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <MdInventory style={{ fontSize: window.innerWidth < 768 ? '24px' : '28px' }} /> Raw Materials
+          </h1>
+          <p style={{ color: '#636e72', marginTop: '4px', fontSize: '13px' }}>Manage recipe templates and ingredients</p>
+        </div>
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -132,13 +142,16 @@ const RawMaterials = () => {
             borderRadius: '8px',
             fontSize: '14px',
             fontWeight: '600',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            width: window.innerWidth < 768 ? '100%' : 'auto'
           }}
         >
           + Add Recipe
         </motion.button>
       </div>
       </div>
+
+      <div style={{ marginTop: window.innerWidth < 768 ? '135px' : '100px' }}>
 
       {showForm && (
         <motion.div
@@ -290,7 +303,7 @@ const RawMaterials = () => {
         </motion.div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 350px), 1fr))', gap: '15px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: window.innerWidth < 480 ? '1fr' : window.innerWidth < 768 ? 'repeat(auto-fill, minmax(280px, 1fr))' : 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
         {items.map((item) => (
           <motion.div
             key={item._id}
@@ -368,10 +381,17 @@ const RawMaterials = () => {
       </div>
 
       {items.length === 0 && !showForm && (
-        <div style={{ textAlign: 'center', padding: '60px', color: '#999' }}>
-          <p style={{ fontSize: '18px' }}>No recipes. Click "Add Recipe" to get started!</p>
-        </div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          style={{ textAlign: 'center', padding: '80px', background: 'white', borderRadius: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)', border: '1px solid #e9ecef' }}
+        >
+          <div style={{ fontSize: '64px', marginBottom: '20px' }}><MdInventory /></div>
+          <p style={{ fontSize: '20px', color: '#2d3436', fontWeight: '600' }}>No recipes yet</p>
+          <p style={{ fontSize: '14px', color: '#636e72', marginTop: '8px' }}>Click "Add Recipe" to get started!</p>
+        </motion.div>
       )}
+      </div>
     </div>
   );
 };
