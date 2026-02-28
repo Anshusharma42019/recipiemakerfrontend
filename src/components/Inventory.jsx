@@ -6,6 +6,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 const Inventory = () => {
   const [items, setItems] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({ name: '', quantity: '', unit: '', category: '', price: '', minStock: '' });
 
   const getDefaultMinStock = (unit) => {
@@ -41,8 +42,11 @@ const Inventory = () => {
 
   const addItem = async () => {
     if (formData.name && formData.quantity && formData.unit) {
-      await fetch(`${API_URL}/inventory`, {
-        method: 'POST',
+      const url = editingId ? `${API_URL}/inventory/${editingId}` : `${API_URL}/inventory`;
+      const method = editingId ? 'PUT' : 'POST';
+      
+      await fetch(url, {
+        method,
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -50,6 +54,7 @@ const Inventory = () => {
         body: JSON.stringify(formData)
       });
       setFormData({ name: '', quantity: '', unit: '', category: '', price: '', minStock: '' });
+      setEditingId(null);
       setShowForm(false);
       fetchItems();
     }
@@ -61,6 +66,19 @@ const Inventory = () => {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
     });
     fetchItems();
+  };
+
+  const editItem = (item) => {
+    setFormData({
+      name: item.name,
+      quantity: item.quantity,
+      unit: item.unit,
+      category: item.category || '',
+      price: item.price || '',
+      minStock: item.minStock || ''
+    });
+    setEditingId(item._id);
+    setShowForm(true);
   };
 
   const isLowStock = (item) => {
@@ -99,7 +117,11 @@ const Inventory = () => {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          onClick={() => setShowForm(!showForm)}
+          onClick={() => {
+            setShowForm(!showForm);
+            setEditingId(null);
+            setFormData({ name: '', quantity: '', unit: '', category: '', price: '', minStock: '' });
+          }}
           style={{
             padding: '12px 24px',
             background: 'linear-gradient(135deg, #fd79a8 0%, #a29bfe 100%)',
@@ -128,7 +150,7 @@ const Inventory = () => {
           }}
         >
           <h3 style={{ marginTop: 0, color: '#2d3436', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            🥘 Add New Item
+            {editingId ? '✏️ Edit Item' : '🥘 Add New Item'}
           </h3>
           <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr 1fr', gap: '15px', marginBottom: '20px' }}>
             <input
@@ -236,10 +258,14 @@ const Inventory = () => {
                 fontWeight: '600'
               }}
             >
-              Add
+              {editingId ? 'Update' : 'Add'}
             </button>
             <button
-              onClick={() => setShowForm(false)}
+              onClick={() => {
+                setShowForm(false);
+                setEditingId(null);
+                setFormData({ name: '', quantity: '', unit: '', category: '', price: '', minStock: '' });
+              }}
               style={{
                 padding: '10px 20px',
                 background: '#e0e0e0',
@@ -287,20 +313,36 @@ const Inventory = () => {
                 <span style={{ fontSize: '12px', color: '#ff6348', marginTop: '4px', display: 'block' }}>Low stock! Min: {item.minStock || getDefaultMinStock(item.unit)}</span>
               )}
             </div>
-            <button
-              onClick={() => deleteItem(item._id)}
-              style={{
-                background: '#ff6348',
-                color: 'white',
-                border: 'none',
-                borderRadius: '8px',
-                padding: '8px 16px',
-                cursor: 'pointer',
-                fontWeight: '600'
-              }}
-            >
-              Delete
-            </button>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button
+                onClick={() => editItem(item)}
+                style={{
+                  background: '#74b9ff',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  padding: '8px 16px',
+                  cursor: 'pointer',
+                  fontWeight: '600'
+                }}
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => deleteItem(item._id)}
+                style={{
+                  background: '#ff6348',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  padding: '8px 16px',
+                  cursor: 'pointer',
+                  fontWeight: '600'
+                }}
+              >
+                Delete
+              </button>
+            </div>
           </motion.div>
         ))}
       </div>

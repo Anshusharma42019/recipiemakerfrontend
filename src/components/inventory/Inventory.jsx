@@ -6,6 +6,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 const Inventory = () => {
   const [items, setItems] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({ name: '', quantity: '', unit: '', category: '', price: '' });
 
   useEffect(() => {
@@ -22,8 +23,11 @@ const Inventory = () => {
 
   const addItem = async () => {
     if (formData.name && formData.quantity && formData.unit) {
-      await fetch(`${API_URL}/inventory`, {
-        method: 'POST',
+      const url = editingId ? `${API_URL}/inventory/${editingId}` : `${API_URL}/inventory`;
+      const method = editingId ? 'PUT' : 'POST';
+      
+      await fetch(url, {
+        method,
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -31,6 +35,7 @@ const Inventory = () => {
         body: JSON.stringify(formData)
       });
       setFormData({ name: '', quantity: '', unit: '', category: '', price: '' });
+      setEditingId(null);
       setShowForm(false);
       fetchItems();
     }
@@ -44,30 +49,47 @@ const Inventory = () => {
     fetchItems();
   };
 
+  const editItem = (item) => {
+    setFormData({
+      name: item.name,
+      quantity: item.quantity,
+      unit: item.unit,
+      category: item.category || '',
+      price: item.price || ''
+    });
+    setEditingId(item._id);
+    setShowForm(true);
+  };
+
   return (
     <div style={{ 
-      padding: '40px', 
+      padding: window.innerWidth < 768 ? '20px' : '40px', 
       background: 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=1920&q=80) center/cover fixed',
       minHeight: '100vh' 
     }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
+      <div style={{ display: 'flex', flexDirection: window.innerWidth < 768 ? 'column' : 'row', justifyContent: 'space-between', alignItems: window.innerWidth < 768 ? 'flex-start' : 'center', marginBottom: '30px', gap: '15px' }}>
         <div>
-          <h1 style={{ fontSize: '36px', fontWeight: '800', color: 'white', margin: 0 }}>🍳 Inventory</h1>
-          <p style={{ color: 'rgba(255, 255, 255, 0.9)', marginTop: '8px', fontSize: '14px' }}>Manage your kitchen ingredients</p>
+          <h1 style={{ fontSize: window.innerWidth < 768 ? '28px' : '36px', fontWeight: '800', color: 'white', margin: 0 }}>🍳 Inventory</h1>
+          <p style={{ color: 'rgba(255, 255, 255, 0.9)', marginTop: '8px', fontSize: window.innerWidth < 768 ? '12px' : '14px' }}>Manage your kitchen ingredients</p>
         </div>
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          onClick={() => setShowForm(!showForm)}
+          onClick={() => {
+            setShowForm(!showForm);
+            setEditingId(null);
+            setFormData({ name: '', quantity: '', unit: '', category: '', price: '' });
+          }}
           style={{
             padding: '12px 24px',
             background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             color: 'white',
             border: 'none',
             borderRadius: '10px',
-            fontSize: '16px',
+            fontSize: window.innerWidth < 768 ? '14px' : '16px',
             fontWeight: '600',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            width: window.innerWidth < 768 ? '100%' : 'auto'
           }}
         >
           + Add Item
@@ -88,8 +110,8 @@ const Inventory = () => {
             border: '1px solid rgba(255, 255, 255, 0.2)'
           }}
         >
-          <h3 style={{ marginTop: 0, color: 'white', fontSize: '20px', fontWeight: '700' }}>✨ Add New Item</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr', gap: '15px', marginBottom: '20px' }}>
+          <h3 style={{ marginTop: 0, color: 'white', fontSize: window.innerWidth < 768 ? '18px' : '20px', fontWeight: '700' }}>{editingId ? '✏️ Edit Item' : '✨ Add New Item'}</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: window.innerWidth < 768 ? '1fr' : '2fr 1fr 1fr 1fr 1fr', gap: '15px', marginBottom: '20px' }}>
             <input
               type="text"
               placeholder="Item name (e.g., Flour)"
@@ -195,10 +217,14 @@ const Inventory = () => {
                 fontWeight: '600'
               }}
             >
-              Add
+              {editingId ? 'Update' : 'Add'}
             </button>
             <button
-              onClick={() => setShowForm(false)}
+              onClick={() => {
+                setShowForm(false);
+                setEditingId(null);
+                setFormData({ name: '', quantity: '', unit: '', category: '', price: '' });
+              }}
               style={{
                 padding: '10px 20px',
                 background: 'rgba(255, 255, 255, 0.2)',
@@ -216,7 +242,7 @@ const Inventory = () => {
         </motion.div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: window.innerWidth < 480 ? '1fr' : window.innerWidth < 768 ? 'repeat(auto-fill, minmax(250px, 1fr))' : 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
         {items.map((item) => (
           <motion.div
             key={item._id}
@@ -227,36 +253,56 @@ const Inventory = () => {
             style={{
               background: 'rgba(255, 255, 255, 0.15)',
               backdropFilter: 'blur(10px)',
-              padding: '24px',
+              padding: window.innerWidth < 768 ? '16px' : '24px',
               borderRadius: '16px',
               boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
               display: 'flex',
+              flexDirection: window.innerWidth < 480 ? 'column' : 'row',
               justifyContent: 'space-between',
-              alignItems: 'center',
-              border: '1px solid rgba(255, 255, 255, 0.2)'
+              alignItems: window.innerWidth < 480 ? 'flex-start' : 'center',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              gap: '12px'
             }}
           >
             <div>
-              <h3 style={{ margin: '0 0 10px 0', color: 'white', fontSize: '20px', fontWeight: '700', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)' }}>{item.name}</h3>
-              <p style={{ margin: '0 0 6px 0', color: 'white', fontSize: '15px', fontWeight: '600', textShadow: '1px 1px 3px rgba(0, 0, 0, 0.8)' }}>
+              <h3 style={{ margin: '0 0 10px 0', color: 'white', fontSize: window.innerWidth < 768 ? '18px' : '20px', fontWeight: '700', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)' }}>{item.name}</h3>
+              <p style={{ margin: '0 0 6px 0', color: 'white', fontSize: window.innerWidth < 768 ? '14px' : '15px', fontWeight: '600', textShadow: '1px 1px 3px rgba(0, 0, 0, 0.8)' }}>
                 {item.quantity} {item.unit} {item.price > 0 && `• $${item.price}`}
               </p>
               {item.category && <span style={{ fontSize: '13px', color: 'white', marginTop: '4px', display: 'inline-block', background: 'rgba(255, 255, 255, 0.25)', padding: '4px 12px', borderRadius: '20px', fontWeight: '600', textShadow: '1px 1px 2px rgba(0, 0, 0, 0.7)' }}>📦 {item.category}</span>}
             </div>
-            <button
-              onClick={() => deleteItem(item._id)}
-              style={{
-                background: '#ff4757',
-                color: 'white',
-                border: 'none',
-                borderRadius: '8px',
-                padding: '8px 16px',
-                cursor: 'pointer',
-                fontWeight: '600'
-              }}
-            >
-              Delete
-            </button>
+            <div style={{ display: 'flex', gap: '8px', width: window.innerWidth < 480 ? '100%' : 'auto' }}>
+              <button
+                onClick={() => editItem(item)}
+                style={{
+                  background: '#5f27cd',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  padding: '8px 16px',
+                  cursor: 'pointer',
+                  fontWeight: '600',
+                  flex: window.innerWidth < 480 ? '1' : 'none'
+                }}
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => deleteItem(item._id)}
+                style={{
+                  background: '#ff4757',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  padding: '8px 16px',
+                  cursor: 'pointer',
+                  fontWeight: '600',
+                  flex: window.innerWidth < 480 ? '1' : 'none'
+                }}
+              >
+                Delete
+              </button>
+            </div>
           </motion.div>
         ))}
       </div>

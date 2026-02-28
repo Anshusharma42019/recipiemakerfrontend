@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Register from './components/Register';
 import Login from './components/Login';
 import Sidebar from './components/Sidebar';
@@ -11,6 +11,13 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
   const [showRegister, setShowRegister] = useState(false);
   const [activeTab, setActiveTab] = useState('inventory');
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -40,14 +47,51 @@ const App = () => {
   }
 
   return (
-    <div style={{ display: 'flex', height: '100vh', background: '#f5f5f5' }}>
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} onLogout={handleLogout} />
-      <div style={{ flex: 1, overflow: 'auto' }}>
-        {activeTab === 'inventory' && <Inventory />}
-        {activeTab === 'recipes' && <Recipes />}
-        {activeTab === 'rawmaterials' && <RawMaterials />}
-        {activeTab === 'settings' && <ChangePassword />}
+    <div style={{ display: 'flex', height: '100vh', background: '#f5f5f5', flexDirection: 'column' }}>
+      <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+        {!isMobile && <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} onLogout={handleLogout} />}
+        <div style={{ flex: 1, overflow: 'auto', paddingBottom: isMobile ? '80px' : '0' }}>
+          {activeTab === 'inventory' && <Inventory />}
+          {activeTab === 'recipes' && <Recipes />}
+          {activeTab === 'rawmaterials' && <RawMaterials />}
+          {activeTab === 'settings' && <ChangePassword />}
+        </div>
       </div>
+      {isMobile && (
+        <div style={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          background: '#1e272e',
+          display: 'flex',
+          justifyContent: 'space-around',
+          padding: '10px 0',
+          boxShadow: '0 -2px 10px rgba(0,0,0,0.3)',
+          zIndex: 1000
+        }}>
+          <div onClick={() => setActiveTab('recipes')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', flex: 1 }}>
+            <span style={{ fontSize: '24px', marginBottom: '4px' }}>📖</span>
+            <span style={{ fontSize: '12px', color: activeTab === 'recipes' ? '#3498db' : '#95a5a6', fontWeight: activeTab === 'recipes' ? '600' : '400' }}>Recipes</span>
+          </div>
+          <div onClick={() => setActiveTab('inventory')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', flex: 1 }}>
+            <span style={{ fontSize: '24px', marginBottom: '4px' }}>📦</span>
+            <span style={{ fontSize: '12px', color: activeTab === 'inventory' ? '#3498db' : '#95a5a6', fontWeight: activeTab === 'inventory' ? '600' : '400' }}>Inventory</span>
+          </div>
+          <div onClick={() => setActiveTab('rawmaterials')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', flex: 1 }}>
+            <span style={{ fontSize: '24px', marginBottom: '4px' }}>🏭</span>
+            <span style={{ fontSize: '12px', color: activeTab === 'rawmaterials' ? '#3498db' : '#95a5a6', fontWeight: activeTab === 'rawmaterials' ? '600' : '400' }}>Materials</span>
+          </div>
+          <div onClick={() => setActiveTab('settings')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', flex: 1 }}>
+            <span style={{ fontSize: '24px', marginBottom: '4px' }}>⚙️</span>
+            <span style={{ fontSize: '12px', color: activeTab === 'settings' ? '#3498db' : '#95a5a6', fontWeight: activeTab === 'settings' ? '600' : '400' }}>Settings</span>
+          </div>
+          <div onClick={handleLogout} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', flex: 1 }}>
+            <span style={{ fontSize: '24px', marginBottom: '4px' }}>🚪</span>
+            <span style={{ fontSize: '12px', color: '#95a5a6' }}>Logout</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
