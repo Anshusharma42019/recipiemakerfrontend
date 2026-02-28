@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { MdSettings, MdLock } from 'react-icons/md';
 
 const ChangePassword = () => {
   const [formData, setFormData] = useState({ currentPassword: '', newPassword: '' });
@@ -30,107 +31,125 @@ const ChangePassword = () => {
 
   return (
     <div style={{ 
-      padding: '40px', 
-      background: 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(https://images.unsplash.com/photo-1556911220-bff31c812dba?w=1920&q=80) center/cover fixed',
+      padding: '15px', 
+      background: '#f8f9fa',
       minHeight: '100vh',
       display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
+      flexDirection: 'column'
     }}>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        style={{
-          background: 'rgba(255, 255, 255, 0.15)',
-          backdropFilter: 'blur(10px)',
-          padding: '40px',
-          borderRadius: '20px',
-          boxShadow: '0 10px 40px rgba(0,0,0,0.2)',
-          maxWidth: '450px',
-          width: '100%',
-          border: '1px solid rgba(255, 255, 255, 0.2)'
-        }}
-      >
-        <h2 style={{ color: 'white', fontSize: '28px', fontWeight: '700', marginBottom: '10px', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>⚙️ Settings</h2>
-        <p style={{ color: 'white', marginBottom: '30px', fontSize: '14px', textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>Change your account password</p>
-        <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: '20px' }}>
-            <label style={{ display: 'block', marginBottom: '8px', color: 'white', fontWeight: '600', fontSize: '14px', textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>Current Password</label>
-            <input
-              type="password"
-              placeholder="Enter current password"
-              value={formData.currentPassword}
-              onChange={(e) => setFormData({ ...formData, currentPassword: e.target.value })}
+      <div style={{ 
+        position: 'sticky',
+        top: 0,
+        background: '#f8f9fa',
+        zIndex: 10,
+        paddingBottom: '20px',
+        marginBottom: '10px',
+        borderBottom: '2px solid #e9ecef'
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h1 style={{ fontSize: '28px', fontWeight: '700', color: '#2d3436', margin: 0 }}>
+            <MdSettings style={{ verticalAlign: 'middle' }} /> Settings
+          </h1>
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          style={{
+            background: 'white',
+            padding: '30px',
+            borderRadius: '15px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+            maxWidth: '450px',
+            width: '100%',
+            border: '1px solid #e9ecef'
+          }}
+        >
+          <div style={{ textAlign: 'center', marginBottom: '25px' }}>
+            <MdLock style={{ fontSize: '48px', color: '#667eea', marginBottom: '10px' }} />
+            <h2 style={{ color: '#2d3436', fontSize: '22px', fontWeight: '600', marginBottom: '8px' }}>Change Password</h2>
+            <p style={{ color: '#636e72', fontSize: '13px' }}>Update your account password</p>
+          </div>
+          <form onSubmit={handleSubmit}>
+            <div style={{ marginBottom: '18px' }}>
+              <label style={{ display: 'block', marginBottom: '6px', color: '#2d3436', fontWeight: '600', fontSize: '13px' }}>Current Password</label>
+              <input
+                type="password"
+                placeholder="Enter current password"
+                value={formData.currentPassword}
+                onChange={(e) => setFormData({ ...formData, currentPassword: e.target.value })}
+                style={{ 
+                  width: '100%', 
+                  padding: '10px', 
+                  border: '2px solid #e0e0e0',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  outline: 'none',
+                  boxSizing: 'border-box'
+                }}
+                required
+              />
+            </div>
+            <div style={{ marginBottom: '22px' }}>
+              <label style={{ display: 'block', marginBottom: '6px', color: '#2d3436', fontWeight: '600', fontSize: '13px' }}>New Password</label>
+              <input
+                type="password"
+                placeholder="Enter new password"
+                value={formData.newPassword}
+                onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
+                style={{ 
+                  width: '100%', 
+                  padding: '10px', 
+                  border: '2px solid #e0e0e0',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  outline: 'none',
+                  boxSizing: 'border-box'
+                }}
+                required
+              />
+            </div>
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              type="submit"
               style={{ 
                 width: '100%', 
                 padding: '12px', 
-                border: '2px solid #e0e0e0',
-                borderRadius: '10px',
-                fontSize: '15px',
-                outline: 'none',
-                boxSizing: 'border-box'
+                background: '#667eea',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                fontSize: '14px',
+                fontWeight: '600',
+                cursor: 'pointer'
               }}
-              required
-            />
-          </div>
-          <div style={{ marginBottom: '25px' }}>
-            <label style={{ display: 'block', marginBottom: '8px', color: 'white', fontWeight: '600', fontSize: '14px', textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>New Password</label>
-            <input
-              type="password"
-              placeholder="Enter new password"
-              value={formData.newPassword}
-              onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
-              style={{ 
-                width: '100%', 
-                padding: '12px', 
-                border: '2px solid #e0e0e0',
-                borderRadius: '10px',
-                fontSize: '15px',
-                outline: 'none',
-                boxSizing: 'border-box'
-              }}
-              required
-            />
-          </div>
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            type="submit"
-            style={{ 
-              width: '100%', 
-              padding: '14px', 
-              background: 'rgba(102, 126, 234, 0.8)',
-              backdropFilter: 'blur(10px)',
-              color: 'white',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
-              borderRadius: '10px',
-              fontSize: '16px',
-              fontWeight: '600',
-              cursor: 'pointer'
-            }}
-          >
-            Change Password
-          </motion.button>
-        </form>
-        {message && (
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            style={{ color: '#00b894', marginTop: '20px', textAlign: 'center', fontWeight: '600' }}
-          >
-            ✓ {message}
-          </motion.p>
-        )}
-        {error && (
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            style={{ color: '#ff4757', marginTop: '20px', textAlign: 'center', fontWeight: '600' }}
-          >
-            ✕ {error}
-          </motion.p>
-        )}
-      </motion.div>
+            >
+              Change Password
+            </motion.button>
+          </form>
+          {message && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              style={{ color: '#00b894', marginTop: '15px', textAlign: 'center', fontWeight: '600', fontSize: '13px' }}
+            >
+              ✓ {message}
+            </motion.p>
+          )}
+          {error && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              style={{ color: '#ff4757', marginTop: '15px', textAlign: 'center', fontWeight: '600', fontSize: '13px' }}
+            >
+              ✕ {error}
+            </motion.p>
+          )}
+        </motion.div>
+      </div>
     </div>
   );
 };
